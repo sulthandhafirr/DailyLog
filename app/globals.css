@@ -1,0 +1,48 @@
+/* ===================================
+   Tailwind CSS Layers
+   =================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===================================
+   Base Styles
+   =================================== */
+* {
+  box-sizing: border-box;
+}
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+}
+
+/* ===================================
+   Custom Utilities (Optional)
+   =================================== */
+@layer utilities {
+  /* Smooth scrolling for anchor links */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  
+  /* Prevent text selection on buttons */
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ===================================
+   Print Styles (For Reports)
+   =================================== */
+@media print {
+  body {
+    @apply bg-white text-black;
+  }
+  
+  button,
+  .no-print {
+    @apply hidden;
+  }
+}
