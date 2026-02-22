@@ -158,7 +158,7 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
     };
 
     return (
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 w-full sm:w-auto">
         <input
           ref={timeInputRef}
           type="text"
@@ -168,7 +168,7 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
           onKeyDown={handleTimeKeyDown}
           disabled={disabled}
           placeholder={placeholder}
-          className="w-24 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 text-center font-mono placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 sm:flex-none sm:w-24 px-3 py-2.5 sm:py-2 text-base sm:text-sm border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 text-center font-mono placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           maxLength={5}
         />
         <select
@@ -177,7 +177,7 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
           onChange={handlePeriodChange}
           onKeyDown={handlePeriodKeyDown}
           disabled={disabled}
-          className="w-16 px-2 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-20 sm:w-16 px-2 py-2.5 sm:py-2 text-base sm:text-sm border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           <option value="AM">AM</option>
           <option value="PM">PM</option>

@@ -139,16 +139,16 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-900 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">
+        <header className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100">
               Daily Report Generator
             </h1>
             <Link 
               href="/history" 
-              className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+              className="inline-flex items-center justify-center sm:justify-start px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent rounded-md sm:rounded-none"
             >
               View History →
             </Link>
@@ -156,13 +156,13 @@ export default function HomePage() {
           
           {/* Edit Mode Banner */}
           {reportId && (
-            <div className="inline-flex items-center gap-3 px-4 py-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-              <span className="text-sm font-medium text-amber-800 dark:text-amber-200">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 sm:py-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+              <span className="text-xs sm:text-sm font-medium text-amber-800 dark:text-amber-200">
                 📝 Edit Mode: Modifying existing report
               </span>
               <button 
                 onClick={handleExitEditMode}
-                className="px-3 py-1 text-xs font-medium text-amber-700 dark:text-amber-300 bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 rounded hover:bg-amber-50 dark:hover:bg-slate-700 transition-colors"
+                className="w-full sm:w-auto px-3 py-2 sm:py-1 text-xs font-medium text-amber-700 dark:text-amber-300 bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 rounded hover:bg-amber-50 dark:hover:bg-slate-700 transition-colors"
                 title="Exit edit mode and create new report"
               >
                 ✕ Exit Edit Mode
@@ -172,9 +172,9 @@ export default function HomePage() {
         </header>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Left: Form */}
-          <div className="lg:sticky lg:top-8 h-fit">
+          <div className="order-1">
             <ReportForm
               key={reportId || 'new'}
               onGenerateReport={handleGenerateReport}
@@ -184,10 +184,10 @@ export default function HomePage() {
           </div>
 
           {/* Right: Output */}
-          <div>
+          <div className="order-2">
             {error && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg mb-6">
-                <p className="text-sm font-medium text-red-800 dark:text-red-200">
+              <div className="p-3 sm:p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg mb-4 sm:mb-6">
+                <p className="text-xs sm:text-sm font-medium text-red-800 dark:text-red-200">
                   <strong>Error:</strong> {error}
                 </p>
               </div>
@@ -203,8 +203,8 @@ export default function HomePage() {
             )}
 
             {!report && !error && (
-              <div className="p-8 bg-gray-50 dark:bg-slate-800 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg text-center">
-                <p className="text-gray-600 dark:text-slate-400">
+              <div className="p-6 sm:p-8 bg-gray-50 dark:bg-slate-800 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg text-center">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400">
                   Fill in the form and click "Generate Report" to see your professional daily report here.
                 </p>
               </div>
