@@ -151,17 +151,17 @@ export default function HistoryPage() {
       <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}
         <header className="mb-6 sm:mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:items-center">
             <Link 
               href="/" 
               className="inline-flex items-center justify-center sm:justify-start px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent rounded-md sm:rounded-none order-2 sm:order-1"
             >
               ← Back to Generator
             </Link>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 text-center sm:text-left order-1 sm:order-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 text-center order-1 sm:order-2">
               Report History
             </h1>
-            <div className="hidden sm:block w-32"></div> {/* Spacer for center alignment on desktop */}
+            <div className="order-3"></div> {/* Spacer for center alignment on desktop */}
           </div>
         </header>
 

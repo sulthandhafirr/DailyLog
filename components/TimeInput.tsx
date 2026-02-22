@@ -36,16 +36,19 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
     const { time: initialTime, period: initialPeriod } = parseExistingValue(value);
     const [timeValue, setTimeValue] = useState(initialTime);
     const [period, setPeriod] = useState<'AM' | 'PM'>(initialPeriod as 'AM' | 'PM');
+    const [isTyping, setIsTyping] = useState(false);
     
     const timeInputRef = useRef<HTMLInputElement>(null);
     const periodInputRef = useRef<HTMLSelectElement>(null);
 
-    // ✅ Sync local state when value prop changes (for edit mode)
+    // ✅ Sync local state when value prop changes (for edit mode) but not while typing
     useEffect(() => {
-      const parsed = parseExistingValue(value);
-      setTimeValue(parsed.time);
-      setPeriod(parsed.period as 'AM' | 'PM');
-    }, [value]);
+      if (!isTyping) {
+        const parsed = parseExistingValue(value);
+        setTimeValue(parsed.time);
+        setPeriod(parsed.period as 'AM' | 'PM');
+      }
+    }, [value, isTyping]);
 
     // Expose focus method to parent
     useImperativeHandle(ref, () => ({
@@ -102,17 +105,17 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
     const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const input = e.target.value;
       
-      // Allow only numbers and colon
-      if (input && !/^[\d:]*$/.test(input)) {
-        return;
-      }
-
-      setTimeValue(input);
-      // Update parent immediately with raw value
-      onChange(input ? `${input} ${period}` : '');
+      // Allow only numbers and colon, but be more permissive during typing
+      const sanitized = input.replace(/[^\d:]/g, '');
+      
+      setIsTyping(true);
+      setTimeValue(sanitized);
+      // Update parent immediately with current value
+      onChange(sanitized ? `${sanitized} ${period}` : '');
     };
 
     const handleTimeBlur = () => {
+      setIsTyping(false);
       // Format on blur
       if (timeValue) {
         const formatted = formatTime(timeValue);
@@ -122,9 +125,14 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
       }
     };
 
+    const handleTimeFocus = () => {
+      setIsTyping(true);
+    };
+
     const handleTimeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
         e.preventDefault();
+        setIsTyping(false);
         // Format immediately
         if (timeValue) {
           const formatted = formatTime(timeValue);
@@ -162,8 +170,10 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
         <input
           ref={timeInputRef}
           type="text"
+          inputMode="numeric"
           value={timeValue}
           onChange={handleTimeChange}
+          onFocus={handleTimeFocus}
           onBlur={handleTimeBlur}
           onKeyDown={handleTimeKeyDown}
           disabled={disabled}
