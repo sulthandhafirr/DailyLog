@@ -149,7 +149,7 @@ export default function HomePage() {
             </h1>
             <Link 
               href="/history" 
-              className="inline-flex items-center justify-center sm:justify-end px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent rounded-md sm:rounded-none order-3"
+              className="inline-flex items-center justify-center sm:justify-end px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent sm:dark:bg-transparent rounded-md sm:rounded-none order-3"
             >
               View History →
             </Link>
