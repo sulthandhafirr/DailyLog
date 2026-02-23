@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ReportForm from '@/components/ReportForm';
 import ReportDisplay from '@/components/ReportDisplay';
 import { Activity, ReportResponse } from '@/lib/types';
 
 export default function HomePage() {
+  const router = useRouter();
   const [report, setReport] = useState<string>('');
   const [reportId, setReportId] = useState<string>('');
   const [date, setDate] = useState<string>('');
@@ -105,9 +107,10 @@ export default function HomePage() {
       const data = await response.json();
 
       if (data.success && data.reportId) {
-        setReportId(data.reportId);
         const message = reportId ? '✅ Report updated successfully!' : '✅ Report saved to history!';
         alert(message);
+        // Redirect to history page after successful save
+        router.push('/history');
       } else {
         setError(data.error || 'Failed to save report');
       }
