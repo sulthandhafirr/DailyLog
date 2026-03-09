@@ -26,7 +26,6 @@ export default function EmailModal({ isOpen, onClose, reportId, reportDate }: Em
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address');
@@ -110,7 +109,7 @@ export default function EmailModal({ isOpen, onClose, reportId, reportDate }: Em
           {success ? (
             <div className="p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-center">
               <p className="text-xs sm:text-sm font-medium text-green-800 dark:text-green-200">
-                ✅ Email sent successfully!
+                Email sent successfully!
               </p>
             </div>
           ) : (

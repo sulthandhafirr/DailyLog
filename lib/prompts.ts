@@ -46,10 +46,6 @@ OUTPUT RULES:
 Follow the style demonstrated in the provided examples EXACTLY.
 `;
 
-/**
- * Generates the user prompt from the provided date and activities
- * This is the actual data sent to the AI for processing
- */
 export function buildUserPrompt(date: string, activities: Activity[]): string {
   const activitiesList = activities
     .map((activity) => `${activity.time} – ${activity.description}`)

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ArrowLeft, CheckCircle } from 'lucide-react';
 import { DailyReport } from '@/lib/types';
 import EmailModal from '@/components/EmailModal';
 
@@ -22,25 +23,12 @@ export default function HistoryPage() {
   const fetchReports = async () => {
     try {
       setLoading(true);
-      console.log('[History] Fetching reports...');
       const response = await fetch('/api/reports');
       const data = await response.json();
 
       if (data.success) {
-        console.log('[History] Fetched', data.reports.length, 'reports');
-        // Validate that all reports have IDs
-        const reportsWithIds = data.reports.filter((r: DailyReport) => {
-          if (!r.id) {
-            console.error('[History] Report missing ID:', r);
-            return false;
-          }
-          return true;
-        });
+        const reportsWithIds = data.reports.filter((r: DailyReport) => r.id);
         setReports(reportsWithIds);
-        
-        if (reportsWithIds.length !== data.reports.length) {
-          console.warn('[History] Some reports were missing IDs and filtered out');
-        }
       } else {
         setError(data.error || 'Failed to load reports');
       }
@@ -65,7 +53,7 @@ export default function HistoryPage() {
       // Create date using UTC to avoid timezone shifts
       const date = new Date(Date.UTC(year, month - 1, day));
 
-      return date.toLocaleDateString('en-US', {
+      return date.toLocaleDateString('en-GB', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -91,22 +79,19 @@ export default function HistoryPage() {
     
     console.log('[History] Editing report:', report.id);
     
-    // Convert ISO date to readable format for form input
     const readableDate = formatDate(report.report_date);
     
-    // Store COMPLETE report data in sessionStorage for editing
     sessionStorage.setItem('editReport', JSON.stringify({
       id: report.id,
-      date: readableDate, // ✅ Store in readable format for form
+      date: readableDate,
       activities: report.activities,
-      fullReport: report.full_report, // ✅ Include the full generated report
+      fullReport: report.full_report,
     }));
     router.push('/');
   };
 
   const handleDelete = async (reportId: string, reportDate: string) => {
     if (!reportId) {
-      console.error('[History] Cannot delete report without ID');
       alert('Error: Report ID is missing');
       return;
     }
@@ -117,8 +102,6 @@ export default function HistoryPage() {
 
     if (!confirmed) return;
 
-    console.log('[History] Deleting report:', reportId);
-
     try {
       const response = await fetch(`/api/reports/${reportId}`, {
         method: 'DELETE',
@@ -127,12 +110,9 @@ export default function HistoryPage() {
       const data = await response.json();
 
       if (data.success) {
-        console.log('[History] Report deleted successfully');
-        // Remove from local state
         setReports(reports.filter(r => r.id !== reportId));
-        alert('✅ Report deleted successfully');
+        alert('Report deleted successfully');
       } else {
-        console.error('[History] Delete failed:', data.error);
         alert('Failed to delete report: ' + (data.error || 'Unknown error'));
       }
     } catch (err) {
@@ -154,14 +134,14 @@ export default function HistoryPage() {
           <div className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:items-center">
             <Link 
               href="/" 
-              className="inline-flex items-center justify-center sm:justify-start px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent sm:dark:bg-transparent rounded-md sm:rounded-none order-2 sm:order-1"
+              className="inline-flex items-center gap-2 justify-center sm:justify-start px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent sm:dark:bg-transparent rounded-md sm:rounded-none order-2 sm:order-1"
             >
-              ← Back to Generator
+              <ArrowLeft className="w-4 h-4" /> Back to Generator
             </Link>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 text-center order-1 sm:order-2">
               Report History
             </h1>
-            <div className="order-3"></div> {/* Spacer for center alignment on desktop */}
+            <div className="order-3"></div>
           </div>
         </header>
 

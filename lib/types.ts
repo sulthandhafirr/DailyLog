@@ -1,10 +1,6 @@
-/**
- * Type definitions for the Daily Report Generator
- */
-
 export interface Activity {
-  time: string;        // Format: "HH:MM AM/PM"
-  description: string; // Free text description
+  time: string;
+  description: string;
 }
 
 export interface ReportRequest {
@@ -14,9 +10,9 @@ export interface ReportRequest {
 
 export interface ReportResponse {
   success: boolean;
-  report?: string;       // Generated report text
-  reportId?: string;     // Database ID of saved report
-  error?: string;        // Error message if failed
+  report?: string;
+  reportId?: string;
+  error?: string;
 }
 
 export interface GenerateReportPayload {
@@ -24,19 +20,18 @@ export interface GenerateReportPayload {
   activities: Activity[];
 }
 
-// Database types
 export interface DailyReport {
   id: string;
-  report_date: string;   // ISO date string
+  report_date: string;
   activities: Activity[];
   summary: string | null;
   full_report: string;
-  created_at: string;    // ISO timestamp
+  created_at: string;
 }
 
 export interface ReportListItem {
   id: string;
   report_date: string;
   created_at: string;
-  preview: string;       // First 100 chars of report
+  preview: string;
 }

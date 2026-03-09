@@ -14,15 +14,8 @@ export interface TimeInputRef {
   focus: () => void;
 }
 
-/**
- * Smart time input component with:
- * - Auto-formatting (0225 → 02:25, 930 → 09:30)
- * - AM/PM selection
- * - Keyboard navigation (Enter key support)
- */
 const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
   ({ value, onChange, onEnter, disabled, placeholder = 'e.g., 930' }, ref) => {
-    // Parse existing value
     const parseExistingValue = (val: string): { time: string; period: string } => {
       if (!val) return { time: '', period: 'AM' };
       
@@ -41,7 +34,6 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
     const timeInputRef = useRef<HTMLInputElement>(null);
     const periodInputRef = useRef<HTMLSelectElement>(null);
 
-    // ✅ Sync local state when value prop changes (for edit mode) but not while typing
     useEffect(() => {
       if (!isTyping) {
         const parsed = parseExistingValue(value);
@@ -50,24 +42,13 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
       }
     }, [value, isTyping]);
 
-    // Expose focus method to parent
     useImperativeHandle(ref, () => ({
       focus: () => {
         timeInputRef.current?.focus();
       },
     }));
 
-    /**
-     * Format numeric input to HH:MM
-     * Examples:
-     * - 930 → 09:30
-     * - 1430 → 14:30
-     * - 0225 → 02:25
-     * - 9 → 09:00
-     * - 12 → 12:00
-     */
     const formatTime = (input: string): string => {
-      // Remove all non-numeric characters
       const numbers = input.replace(/\D/g, '');
       
       if (!numbers) return '';
@@ -76,25 +57,20 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
       let minutes = '';
 
       if (numbers.length === 1 || numbers.length === 2) {
-        // 9 → 09:00, 12 → 12:00
         hours = numbers.padStart(2, '0');
         minutes = '00';
       } else if (numbers.length === 3) {
-        // 930 → 09:30
         hours = numbers.substring(0, 1).padStart(2, '0');
         minutes = numbers.substring(1, 3);
       } else {
-        // 0225 → 02:25, 1430 → 14:30
         hours = numbers.substring(0, 2);
         minutes = numbers.substring(2, 4);
       }
 
-      // Validate hours (00-23)
       let hoursNum = parseInt(hours, 10);
       if (hoursNum > 23) hoursNum = 23;
       hours = hoursNum.toString().padStart(2, '0');
 
-      // Validate minutes (00-59)
       let minutesNum = parseInt(minutes, 10);
       if (minutesNum > 59) minutesNum = 59;
       minutes = minutesNum.toString().padStart(2, '0');
@@ -104,23 +80,18 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
 
     const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const input = e.target.value;
-      
-      // Allow only numbers and colon, but be more permissive during typing
       const sanitized = input.replace(/[^\d:]/g, '');
       
       setIsTyping(true);
       setTimeValue(sanitized);
-      // Update parent immediately with current value
       onChange(sanitized ? `${sanitized} ${period}` : '');
     };
 
     const handleTimeBlur = () => {
       setIsTyping(false);
-      // Format on blur
       if (timeValue) {
         const formatted = formatTime(timeValue);
         setTimeValue(formatted);
-        // Update parent with formatted value
         onChange(`${formatted} ${period}`);
       }
     };
@@ -133,14 +104,11 @@ const TimeInput = forwardRef<TimeInputRef, TimeInputProps>(
       if (e.key === 'Enter') {
         e.preventDefault();
         setIsTyping(false);
-        // Format immediately
         if (timeValue) {
           const formatted = formatTime(timeValue);
           setTimeValue(formatted);
-          // Update parent with formatted value
           onChange(`${formatted} ${period}`);
         }
-        // Move to period selector or trigger onEnter
         if (onEnter) {
           onEnter();
         } else {

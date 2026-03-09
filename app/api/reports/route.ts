@@ -2,10 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseClient } from '@/lib/supabase';
 import { DailyReport } from '@/lib/types';
 
-/**
- * API Route: GET /api/reports
- * Fetches all daily reports, ordered by date descending
- */
 export async function GET(request: NextRequest) {
   try {
     const supabase = getSupabaseClient();

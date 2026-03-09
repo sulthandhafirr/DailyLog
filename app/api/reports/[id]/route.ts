@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseClient } from '@/lib/supabase';
 
-/**
- * API Route: GET /api/reports/[id]
- * Fetches a single daily report by ID
- */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -58,10 +54,6 @@ export async function GET(
   }
 }
 
-/**
- * API Route: DELETE /api/reports/[id]
- * Deletes a daily report by ID
- */
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -78,7 +70,6 @@ export async function DELETE(
 
     const supabase = getSupabaseClient();
 
-    // First check if report exists
     const { data: existingReport } = await supabase
       .from('daily_reports')
       .select('id')
@@ -92,7 +83,6 @@ export async function DELETE(
       );
     }
 
-    // Delete the report
     const { error } = await supabase
       .from('daily_reports')
       .delete()

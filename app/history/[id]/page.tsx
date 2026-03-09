@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { DailyReport } from '@/lib/types';
 
 export default function ReportDetailPage() {
@@ -15,10 +16,8 @@ export default function ReportDetailPage() {
 
   useEffect(() => {
     if (id) {
-      console.log('[Report Detail] Fetching report:', id);
       fetchReport();
     } else {
-      console.error('[Report Detail] No ID provided in URL params');
       setError('Report ID is missing from URL');
       setLoading(false);
     }
@@ -27,15 +26,12 @@ export default function ReportDetailPage() {
   const fetchReport = async () => {
     try {
       setLoading(true);
-      console.log('[Report Detail] Fetching from API:', `/api/reports/${id}`);
       const response = await fetch(`/api/reports/${id}`);
       const data = await response.json();
 
       if (data.success) {
-        console.log('[Report Detail] Report fetched successfully');
         setReport(data.report);
       } else {
-        console.error('[Report Detail] API returned error:', data.error);
         setError(data.error || 'Report not found');
       }
     } catch (err) {
@@ -48,7 +44,6 @@ export default function ReportDetailPage() {
 
   const formatDate = (dateString: string) => {
     try {
-      // Parse ISO date (YYYY-MM-DD) safely without timezone issues
       const match = dateString.match(/^(\d{4})-(\d{2})-(\d{2})/);
       if (!match) return dateString;
 
@@ -56,14 +51,13 @@ export default function ReportDetailPage() {
       const month = parseInt(match[2], 10);
       const day = parseInt(match[3], 10);
 
-      // Create date using UTC to avoid timezone shifts
       const date = new Date(Date.UTC(year, month - 1, day));
 
       return date.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        timeZone: 'UTC' // Force UTC to prevent timezone shift
+        timeZone: 'UTC'
       });
     } catch {
       return dateString;
@@ -110,9 +104,9 @@ export default function ReportDetailPage() {
           </div>
           <Link 
             href="/history" 
-            className="inline-flex items-center justify-center w-full sm:w-auto px-4 py-2.5 sm:py-2 text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-md hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors"
+            className="inline-flex items-center gap-2 justify-center w-full sm:w-auto px-4 py-2.5 sm:py-2 text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-md hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors"
           >
-            ← Back to History
+            <ArrowLeft className="w-4 h-4" /> Back to History
           </Link>
         </div>
       </main>
@@ -127,14 +121,14 @@ export default function ReportDetailPage() {
           <div className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:items-center mb-3 sm:mb-4">
             <Link 
               href="/history" 
-              className="inline-flex items-center justify-center sm:justify-start px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent sm:dark:bg-transparent rounded-md sm:rounded-none order-2 sm:order-1"
+              className="inline-flex items-center gap-2 justify-center sm:justify-start px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent sm:dark:bg-transparent rounded-md sm:rounded-none order-2 sm:order-1"
             >
-              ← Back to History
+              <ArrowLeft className="w-4 h-4" /> Back to History
             </Link>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 text-center order-1 sm:order-2">
               Daily Report
             </h1>
-            <div className="order-3"></div> {/* Spacer for center alignment on desktop */}
+            <div className="order-3"></div>
           </div>
           <p className="text-center text-base sm:text-lg text-gray-600 dark:text-slate-400">
             {formatDate(report.report_date)}

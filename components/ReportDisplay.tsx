@@ -64,9 +64,7 @@ export default function ReportDisplay({ report, reportId, onSave, isSaving }: Re
                   Saving...
                 </span>
               ) : (
-                <span className="flex items-center justify-center gap-2">
-                  💾 {reportId ? 'Update Report' : 'Save to History'}
-                </span>
+                reportId ? 'Update Report' : 'Save to History'
               )}
             </button>
           )}
@@ -105,16 +103,15 @@ export default function ReportDisplay({ report, reportId, onSave, isSaving }: Re
           )}
         </div>
 
-        {/* Info Message */}
         <div className="text-xs sm:text-sm text-gray-600 dark:text-slate-400">
           {reportId ? (
             <p>
-              <strong className="text-green-600 dark:text-green-400">✅ Saved to History!</strong>{' '}
+              <strong className="text-green-600 dark:text-green-400">Saved to History!</strong>{' '}
               This report is available in your history and can be exported as Word or PDF.
             </p>
           ) : (
             <p>
-              <strong className="text-blue-600 dark:text-blue-400">💡 Tip:</strong>{' '}
+              <strong className="text-blue-600 dark:text-blue-400">Tip:</strong>{' '}
               Click "Save to History" to enable Word and PDF exports.
             </p>
           )}

@@ -3,7 +3,6 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   
-  // ✅ External packages for server components (Next.js 16+)
   serverExternalPackages: [
     'pdfkit',
     'fontkit',
@@ -11,11 +10,8 @@ const nextConfig: NextConfig = {
     'linebreak',
   ],
   
-  // ✅ Webpack config for PDF dependencies
-  // NOTE: Build uses --webpack flag (see vercel.json) to force webpack over Turbopack
   webpack: (config, { isServer }) => {
     if (isServer) {
-      // Exclude problematic PDF dependencies from webpack bundling
       config.externals = config.externals || [];
       config.externals.push({
         'pdfkit': 'commonjs pdfkit',

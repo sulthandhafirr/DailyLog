@@ -20,25 +20,19 @@ export default function ReportForm({ onGenerateReport, isGenerating, initialData
     initialData?.activities || [{ time: '', description: '' }]
   );
 
-  // Refs for focus management
   const timeInputRefs = useRef<(TimeInputRef | null)[]>([]);
   const descriptionInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // ✅ Update form when initialData changes (for edit mode)
   useEffect(() => {
     if (initialData) {
-      console.log('[ReportForm] Loading initial data:', initialData);
       setDate(initialData.date);
       setActivities(initialData.activities);
     } else {
-      // ✅ Reset form when initialData is cleared (exit edit mode)
-      console.log('[ReportForm] Resetting form (no initial data)');
       setDate('');
       setActivities([{ time: '', description: '' }]);
     }
   }, [initialData]);
 
-  // Update refs array when activities change
   useEffect(() => {
     timeInputRefs.current = timeInputRefs.current.slice(0, activities.length);
     descriptionInputRefs.current = descriptionInputRefs.current.slice(0, activities.length);
@@ -46,7 +40,6 @@ export default function ReportForm({ onGenerateReport, isGenerating, initialData
 
   const addActivity = () => {
     setActivities([...activities, { time: '', description: '' }]);
-    // Focus on new activity time input after render
     setTimeout(() => {
       timeInputRefs.current[activities.length]?.focus();
     }, 0);
@@ -67,7 +60,6 @@ export default function ReportForm({ onGenerateReport, isGenerating, initialData
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
     
-    // Filter out empty activities
     const validActivities = activities.filter(
       (a) => a.time.trim() !== '' && a.description.trim() !== ''
     );
@@ -85,20 +77,16 @@ export default function ReportForm({ onGenerateReport, isGenerating, initialData
     onGenerateReport(date, validActivities);
   };
 
-  // Handle Enter key on Time input → focus Description
   const handleTimeEnter = (index: number) => {
     descriptionInputRefs.current[index]?.focus();
   };
 
-  // Handle Enter key on Description → add new activity row
   const handleDescriptionEnter = (index: number) => {
-    // Only add if current description is not empty
     if (activities[index].description.trim()) {
       addActivity();
     }
   };
 
-  // Handle Shift+Enter anywhere → submit form
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && e.shiftKey) {
       e.preventDefault();

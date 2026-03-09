@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ArrowRight, FileEdit, X } from 'lucide-react';
 import ReportForm from '@/components/ReportForm';
 import ReportDisplay from '@/components/ReportDisplay';
 import { Activity, ReportResponse } from '@/lib/types';
@@ -18,29 +19,19 @@ export default function HomePage() {
   const [error, setError] = useState<string>('');
   const [editData, setEditData] = useState<{ id: string; date: string; activities: Activity[]; fullReport?: string } | null>(null);
 
-  // Check for edit data on mount
   useEffect(() => {
     const editReportData = sessionStorage.getItem('editReport');
     if (editReportData) {
       try {
         const data = JSON.parse(editReportData);
-        console.log('[Edit Mode] Loading report:', data.id);
-        
-        // Set form data
         setEditData(data);
         setReportId(data.id);
         setDate(data.date);
         setActivities(data.activities);
-        
-        // ✅ Set the full report to display it on the right side
         if (data.fullReport) {
           setReport(data.fullReport);
-          console.log('[Edit Mode] Report content loaded successfully');
-        } else {
-          console.warn('[Edit Mode] No full report found in edit data');
         }
-        
-        sessionStorage.removeItem('editReport'); // Clear after loading
+        sessionStorage.removeItem('editReport');
       } catch (err) {
         console.error('Error parsing edit data:', err);
         setError('Failed to load report for editing');
@@ -52,8 +43,6 @@ export default function HomePage() {
     setIsGenerating(true);
     setError('');
     setReport('');
-    // ✅ Keep reportId if editing (don't clear it)
-    // setReportId(''); // Removed - preserve reportId for updates
     setDate(reportDate);
     setActivities(reportActivities);
 
@@ -107,9 +96,8 @@ export default function HomePage() {
       const data = await response.json();
 
       if (data.success && data.reportId) {
-        const message = reportId ? '✅ Report updated successfully!' : '✅ Report saved to history!';
+        const message = reportId ? 'Report updated successfully!' : 'Report saved to history!';
         alert(message);
-        // Redirect to history page after successful save
         router.push('/history');
       } else {
         setError(data.error || 'Failed to save report');
@@ -123,14 +111,8 @@ export default function HomePage() {
   };
 
   const handleExitEditMode = () => {
-    // Confirm before exiting
-    const confirmed = window.confirm(
-      'Exit edit mode? Any unsaved changes will be lost.'
-    );
-    
+    const confirmed = window.confirm('Exit edit mode? Any unsaved changes will be lost.');
     if (confirmed) {
-      console.log('[Exit Edit Mode] Clearing edit state');
-      // Clear all edit-related state
       setReportId('');
       setEditData(null);
       setReport('');
@@ -146,30 +128,29 @@ export default function HomePage() {
         {/* Header */}
         <header className="mb-6 sm:mb-8">
           <div className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 mb-4">
-            <div className="order-2 sm:order-1"></div> {/* Spacer for center alignment on desktop */}
+            <div className="order-2 sm:order-1"></div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 text-center order-1 sm:order-2">
               Daily Report Generator
             </h1>
             <Link 
               href="/history" 
-              className="inline-flex items-center justify-center sm:justify-end px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent sm:dark:bg-transparent rounded-md sm:rounded-none order-3"
+              className="inline-flex items-center gap-2 justify-center sm:justify-end px-4 py-2 sm:px-0 sm:py-0 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors bg-blue-50 dark:bg-blue-900/20 sm:bg-transparent sm:dark:bg-transparent rounded-md sm:rounded-none order-3"
             >
-              View History →
+              View History <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           
-          {/* Edit Mode Banner */}
           {reportId && (
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 sm:py-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-              <span className="text-xs sm:text-sm font-medium text-amber-800 dark:text-amber-200">
-                📝 Edit Mode: Modifying existing report
+              <span className="flex items-center gap-2 text-xs sm:text-sm font-medium text-amber-800 dark:text-amber-200">
+                <FileEdit className="w-4 h-4" /> Edit Mode: Modifying existing report
               </span>
               <button 
                 onClick={handleExitEditMode}
-                className="w-full sm:w-auto px-3 py-2 sm:py-1 text-xs font-medium text-amber-700 dark:text-amber-300 bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 rounded hover:bg-amber-50 dark:hover:bg-slate-700 transition-colors"
+                className="flex items-center gap-1 justify-center w-full sm:w-auto px-3 py-2 sm:py-1 text-xs font-medium text-amber-700 dark:text-amber-300 bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 rounded hover:bg-amber-50 dark:hover:bg-slate-700 transition-colors"
                 title="Exit edit mode and create new report"
               >
-                ✕ Exit Edit Mode
+                <X className="w-3 h-3" /> Exit Edit Mode
               </button>
             </div>
           )}
